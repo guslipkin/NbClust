@@ -21,7 +21,7 @@ Average.scattering <- function (cl, x) {
           cluster.size[i]
     }) |>
     unlist() |>
-    matrix(ncol = length(cl), byrow = TRUE)
+    matrix(nrow = max(cl), byrow = TRUE)
 
   var.matrix <- apply(x, 2, \(x) { var(x)*(n-1)/n })
 

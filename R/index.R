@@ -13,8 +13,9 @@ Index.Hubert <- function(x, cl) {
   centers.clusters <- centers(cl, x)
   for (i in 1:n) {
     for (u in 1:k) {
-      if (cl[i] == u)
+      if (cl[i] == u) {
         y[i,] <- centers.clusters[u,]
+      }
     }
   }
 
@@ -458,23 +459,13 @@ Indice.S <- function (d, cl) {
   Si / length(cl)
 }
 
-Indice.Gap <- function (x, clall, reference.distribution = "unif", B = 10, method = "ward.D2", d = NULL, centrotypes = "centroids") {
-  if (sum(c("centroids", "medoids") == centrotypes) == 0)
-    stop("Wrong centrotypes argument")
-  if ("medoids" == centrotypes && is.null(d))
-    stop("For argument centrotypes = 'medoids' d can not be null")
-  if (!is.null(d)) {
-    if (!is.matrix(d)) {
-      d <- as.matrix(d)
-    }
-    row.names(d) <- row.names(x)
-  }
-  X <- as.matrix(x)
-  gap1 <- GAP(X, clall[, 1], reference.distribution, B, method, d, centrotypes)
+Indice.Gap <- function (x, clall, method) {
+  x <- as.matrix(x)
+  gap1 <- GAP(x, clall[, 1], method)
   gap <- gap1$Sgap
-  gap2 <- GAP(X, clall[, 2], reference.distribution, B, method, d, centrotypes)
+  gap2 <- GAP(x, clall[, 2], method)
   diffu <- gap - (gap2$Sgap - gap2$Sdgap)
-  resul <- list(gap = gap, diffu = diffu)
+  resul <- c("gap" = gap, "diffu" = diffu)
   resul
 }
 
@@ -500,8 +491,7 @@ Index.Dindex <- function(cl, x) {
   distance <- density.clusters(cl, x)$distance
   n <- length(distance)
   S <- 0
-  for (i in 1:n)
-    S <- S + distance[i]
+  for (i in 1:n) { S <- S + distance[i] }
   inertieIntra <- S / n
   return(inertieIntra)
 }

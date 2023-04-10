@@ -6,25 +6,8 @@ simgap <- function(Xvec) {
   return(Xout)
 }
 
-pcsim <- function(X, d, centrotypes) {
-  if (centrotypes == "centroids") {
-    Xmm <- apply(X, 2, mean)
-  }
-
-  for (k in (1:dim(X)[2])) {
-    X[, k] <- X[, k] - Xmm[k]
-  }
-  ss <- svd(X)
-  Xs <- X %*% ss$v
-  Xnew <- apply(Xs, 2, simgap)
-  Xt <- Xnew %*% t(ss$v)
-  for (k in (1:dim(X)[2])) {
-    Xt[, k] <- Xt[, k] + Xmm[k]
-  }
-  return(Xt)
-}
-
-GAP <- function(X, cl, referenceDistribution, B, method, d, centrotypes) {
+GAP <- function(X, cl, method) {
+  B <- 10
   set.seed(1)
   if (is.null(dim(x))) {
     dim(x) <- c(length(x), 1)
@@ -33,12 +16,7 @@ GAP <- function(X, cl, referenceDistribution, B, method, d, centrotypes) {
   Wk0 <- 0
   WkB <- matrix(0, 1, B)
   for (bb in (1:B)) {
-    if (reference.distribution == "unif")
-      Xnew <- apply(X, 2, simgap)
-    else if (reference.distribution == "pc")
-      Xnew <- pcsim(X, d, centrotypes)
-    else
-      stop("Wrong reference distribution type")
+    Xnew <- apply(X, 2, simgap)
     if (bb == 1) {
       pp <- cl
       if (ClassNr == length(cl))
@@ -94,8 +72,7 @@ GAP <- function(X, cl, referenceDistribution, B, method, d, centrotypes) {
     }
   }
   Sgap <- mean(log(WkB[1, ])) - log(Wk0)
-  Sdgap <- sqrt(1 + 1 / B) * sqrt(var(log(WkB[1, ]))) * sqrt((B -
-                                                                1) / B)
+  Sdgap <- sqrt(1 + 1 / B) * sqrt(var(log(WkB[1, ]))) * sqrt((B - 1) / B)
   resul <- list(Sgap = Sgap, Sdgap = Sdgap)
   resul
 }

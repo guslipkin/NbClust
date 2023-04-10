@@ -11,7 +11,7 @@ centers <- function(cl, x) {
         apply(2, mean)
     }) |>
     unlist() |>
-    matrix(ncol = length(cl), byrow = TRUE)
+    matrix(nrow = max(cl), byrow = TRUE)
 
   return(centers)
 }
@@ -19,4 +19,16 @@ centers <- function(cl, x) {
 vector_to_matrix <- function(x) {
   if (!is.matrix(x)) { x <- matrix(x, nrow = 1) }
   return(x)
+}
+
+vector_to_col_matrix <- function(x, name = NULL) {
+  y <- x
+  if (!is.matrix(x)) {
+    y <- matrix(x, ncol = 1)
+    if (!is.null(name)) {
+      colnames(y) <- name
+      rownames(y) <- names(x)
+    }
+  }
+  return(y)
 }

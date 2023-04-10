@@ -6,11 +6,11 @@ Dis <- function (cl, x) {
   Distance.centers <- dist(centers.matrix)
   Dmin <- min(Distance.centers)
   Dmax <- max(Distance.centers)
-
   Distance.centers <- as.matrix(Distance.centers)
+
   s2 <- 0
   for (u in 1:k) {
-    s1 = 0
+    s1 <- 0
     for (j in 1:ncol(Distance.centers)) {
       s1 <- s1 + Distance.centers[u, j]
     }
